@@ -1,31 +1,15 @@
 {
+    "version": 2,
     "builds": [
         {
-            "src": "loja_carros/wsgi.py",
-            "use": "@vercel/python",
-            "config": {
-                "maxLambdaSize": "15mb"
-            }
+            "src": "api/index.py",
+            "use": "@vercel/python"
         }
     ],
     "routes": [
         {
-            "src": "/static/(.*)",
-            "dest": "/static/$1"
-        },
-        {
-            "src": "/media/(.*)",
-            "dest": "/media/$1"
-        },
-        {
             "src": "/(.*)",
-            "dest": "loja_carros/wsgi.py"
+            "dest": "api/index.py"
         }
-    ],
-    "functions": {
-        "loja_carros/wsgi.py": {
-            "maxDuration": 30
-        }
-    },
-    "buildCommand": "bash vercel_build.sh"
+    ]
 } 

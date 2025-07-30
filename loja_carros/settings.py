@@ -123,15 +123,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-# Configuração do WhiteNoise para Vercel
-if DEBUG:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-else:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
-
-# Configuração adicional do WhiteNoise
-WHITENOISE_USE_FINDERS = True
-WHITENOISE_AUTOREFRESH = True
+# Configuração simplificada do WhiteNoise para Vercel
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
