@@ -1,0 +1,1 @@
+from loja_carros.wsgi import app 
