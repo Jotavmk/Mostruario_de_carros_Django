@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Comprar {{ carro }} - AutoLoja{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="form-container">
+        <h2 class="text-center mb-4">
+            <i class="fas fa-shopping-cart"></i> Confirmar Compra
+        </h2>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">{{ carro.marca|title }} {{ carro.modelo }}</h5>
+                <div class="car-price">R$ {{ carro.preco|floatformat:2 }}</div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Ano:</strong> {{ carro.ano }}</p>
+                        <p><strong>Quilometragem:</strong> {{ carro.quilometragem }}km</p>
+                        <p><strong>Combustível:</strong> {{ carro.get_combustivel_display }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Cor:</strong> {{ carro.cor }}</p>
+                        <p><strong>Marca:</strong> {{ carro.get_marca_display }}</p>
+                        <p><strong>Comprador:</strong> {{ user.username }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> 
+            <strong>Confirmação de Compra:</strong><br>
+            Você está prestes a comprar este veículo por R$ {{ carro.preco|floatformat:2 }}.
+            Esta ação não pode ser desfeita.
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-check"></i> Confirmar Compra
+                </button>
+                <a href="{% url 'carro_detail' carro.id %}" class="btn btn-danger">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 

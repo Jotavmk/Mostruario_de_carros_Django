@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Minhas Compras - AutoLoja{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">
+        <i class="fas fa-shopping-bag"></i> Minhas Compras
+    </h1>
+    
+    {% if compras %}
+        <div class="row">
+            {% for compra in compras %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="card-title">{{ compra.carro.marca|title }} {{ compra.carro.modelo }}</h5>
+                                <span class="badge bg-success">Comprado</span>
+                            </div>
+                            
+                            <div class="car-price mb-3">R$ {{ compra.preco_pago|floatformat:2 }}</div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <small class="text-muted">Ano</small><br>
+                                    <strong>{{ compra.carro.ano }}</strong>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted">Quilometragem</small><br>
+                                    <strong>{{ compra.carro.quilometragem }}km</strong>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <small class="text-muted">Combustível</small><br>
+                                    <strong>{{ compra.carro.get_combustivel_display }}</strong>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted">Cor</small><br>
+                                    <strong>{{ compra.carro.cor }}</strong>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar"></i> 
+                                    Comprado em {{ compra.data_compra|date:"d/m/Y H:i" }}
+                                </small>
+                                
+                                <a href="{% url 'carro_detail' compra.carro.id %}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye"></i> Ver Detalhes
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> 
+                Total de compras: {{ compras|length }} carro{{ compras|length|pluralize:"s" }}
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> 
+                Você ainda não fez nenhuma compra.
+            </div>
+            <a href="{% url 'carros_list' %}" class="btn btn-primary">
+                <i class="fas fa-car"></i> Ver Carros Disponíveis
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

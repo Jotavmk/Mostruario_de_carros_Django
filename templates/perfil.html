@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Meu Perfil - AutoLoja{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="form-container">
+        <h2 class="text-center mb-4">
+            <i class="fas fa-user"></i> Meu Perfil
+        </h2>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Informações do Usuário</h5>
+                        <p><strong>Nome de usuário:</strong> {{ user.username }}</p>
+                        <p><strong>Data de registro:</strong> {{ user.date_joined|date:"d/m/Y" }}</p>
+                        <p><strong>Último login:</strong> {{ user.last_login|date:"d/m/Y H:i" }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Estatísticas</h5>
+                        <p><strong>Total de compras:</strong> {{ user.compra_set.count }}</p>
+                        <p><strong>Membro desde:</strong> {{ user.date_joined|timesince }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-flex gap-2">
+            <a href="{% url 'minhas_compras' %}" class="btn btn-primary">
+                <i class="fas fa-shopping-bag"></i> Minhas Compras
+            </a>
+            <a href="{% url 'carros_list' %}" class="btn btn-success">
+                <i class="fas fa-car"></i> Ver Carros
+            </a>
+            <a href="{% url 'logout' %}" class="btn btn-danger">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

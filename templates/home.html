@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}JV Carros - Encontre seu carro ideal{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <h1>Encontre seu carro ideal</h1>
+        <p>Milhares de carros usados e seminovos com as melhores condições</p>
+        <a href="{% url 'carros_list' %}" class="btn btn-primary">
+            <i class="fas fa-search"></i> Ver Todos os Carros
+        </a>
+    </div>
+</section>
+
+<!-- Carros em Destaque -->
+<div class="container">
+    <h2 class="text-center mb-4">Carros em Destaque</h2>
+    
+    {% if carros %}
+        <div class="car-grid">
+            {% for carro in carros %}
+                <div class="car-card">
+                    {% if carro.imagem %}
+                        <img src="{{ carro.imagem.url }}" alt="{{ carro }}" class="car-image">
+                    {% else %}
+                        <div class="car-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white;">
+                            <i class="fas fa-car" style="font-size: 3rem;"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="car-info">
+                        <h3 class="car-title">{{ carro.marca|title }} {{ carro.modelo }}</h3>
+                        <div class="car-price">R$ {{ carro.preco|floatformat:2 }}</div>
+                        
+                        <div class="car-details">
+                            <span><i class="fas fa-calendar"></i> {{ carro.ano }}</span>
+                            <span><i class="fas fa-road"></i> {{ carro.quilometragem }}km</span>
+                        </div>
+                        
+                        <div class="car-details">
+                            <span><i class="fas fa-gas-pump"></i> {{ carro.get_combustivel_display }}</span>
+                            <span><i class="fas fa-palette"></i> {{ carro.cor }}</span>
+                        </div>
+                        
+                        <p class="car-description">{{ carro.descricao|truncatewords:15 }}</p>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'carro_detail' carro.id %}" class="btn btn-primary">
+                                <i class="fas fa-eye"></i> Ver Detalhes
+                            </a>
+                            
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'comprar_carro' carro.id %}" class="btn btn-success">
+                                    <i class="fas fa-shopping-cart"></i> Comprar
+                                </a>
+                            {% else %}
+                                <a href="{% url 'login' %}" class="btn btn-success">
+                                    <i class="fas fa-sign-in-alt"></i> Login para Comprar
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'carros_list' %}" class="btn btn-primary">
+                Ver Todos os Carros <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    {% else %}
+        <div class="text-center">
+            <p>Nenhum carro disponível no momento.</p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Seção de Benefícios -->
+<section class="container mt-5">
+    <h2 class="text-center mb-4">Por que escolher a JV Carros?</h2>
+    
+    <div class="row">
+        <div class="col-md-4 text-center mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Garantia de Qualidade</h5>
+                    <p class="card-text">Todos os nossos carros passam por rigorosa inspeção antes de serem disponibilizados.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 text-center mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <i class="fas fa-handshake fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Transparência Total</h5>
+                    <p class="card-text">Informações completas sobre cada veículo, incluindo histórico e condições.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 text-center mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <i class="fas fa-headset fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">Suporte Completo</h5>
+                    <p class="card-text">Nossa equipe está sempre disponível para ajudar você a encontrar o carro ideal.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

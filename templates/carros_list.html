@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Carros Disponíveis - AutoLoja{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">
+        <i class="fas fa-car"></i> Carros Disponíveis
+    </h1>
+    
+    <!-- Filtros -->
+    <div class="filters">
+        <h3><i class="fas fa-filter"></i> Filtros</h3>
+        <form method="get" class="row">
+            <div class="col-md-3 mb-3">
+                <label for="q" class="form-label">Buscar</label>
+                <input type="text" class="form-control" id="q" name="q" value="{{ query }}" placeholder="Marca, modelo...">
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <label for="marca" class="form-label">Marca</label>
+                <select class="form-control" id="marca" name="marca">
+                    <option value="">Todas as marcas</option>
+                    {% for marca_value, marca_label in marcas %}
+                        <option value="{{ marca_value }}" {% if marca_filtro == marca_value %}selected{% endif %}>
+                            {{ marca_label }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="col-md-2 mb-3">
+                <label for="preco_min" class="form-label">Preço Mín</label>
+                <input type="number" class="form-control" id="preco_min" name="preco_min" value="{{ preco_min }}" placeholder="R$">
+            </div>
+            
+            <div class="col-md-2 mb-3">
+                <label for="preco_max" class="form-label">Preço Máx</label>
+                <input type="number" class="form-control" id="preco_max" name="preco_max" value="{{ preco_max }}" placeholder="R$">
+            </div>
+            
+            <div class="col-md-2 mb-3">
+                <label class="form-label">&nbsp;</label>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Filtrar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Resultados -->
+    {% if carros %}
+        <div class="car-grid">
+            {% for carro in carros %}
+                <div class="car-card">
+                    {% if carro.imagem %}
+                        <img src="{{ carro.imagem.url }}" alt="{{ carro }}" class="car-image">
+                    {% else %}
+                        <div class="car-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white;">
+                            <i class="fas fa-car" style="font-size: 3rem;"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="car-info">
+                        <h3 class="car-title">{{ carro.marca|title }} {{ carro.modelo }}</h3>
+                        <div class="car-price">R$ {{ carro.preco|floatformat:2 }}</div>
+                        
+                        <div class="car-details">
+                            <span><i class="fas fa-calendar"></i> {{ carro.ano }}</span>
+                            <span><i class="fas fa-road"></i> {{ carro.quilometragem }}km</span>
+                        </div>
+                        
+                        <div class="car-details">
+                            <span><i class="fas fa-gas-pump"></i> {{ carro.get_combustivel_display }}</span>
+                            <span><i class="fas fa-palette"></i> {{ carro.cor }}</span>
+                        </div>
+                        
+                        <p class="car-description">{{ carro.descricao|truncatewords:15 }}</p>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'carro_detail' carro.id %}" class="btn btn-primary">
+                                <i class="fas fa-eye"></i> Ver Detalhes
+                            </a>
+                            
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'comprar_carro' carro.id %}" class="btn btn-success">
+                                    <i class="fas fa-shopping-cart"></i> Comprar
+                                </a>
+                            {% else %}
+                                <a href="{% url 'login' %}" class="btn btn-success">
+                                    <i class="fas fa-sign-in-alt"></i> Login para Comprar
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <p>Mostrando {{ carros|length }} carro{{ carros|length|pluralize:"s" }} encontrado{{ carros|length|pluralize:"s" }}</p>
+        </div>
+    {% else %}
+        <div class="text-center">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> Nenhum carro encontrado com os filtros aplicados.
+            </div>
+            <a href="{% url 'carros_list' %}" class="btn btn-primary">
+                <i class="fas fa-times"></i> Limpar Filtros
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 
